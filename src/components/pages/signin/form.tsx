@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -18,9 +19,10 @@ const SigninFormComponent = () => {
     handleSubmit,
     formState: { errors },
   } = signinForm;
-
+const navigate= useNavigate()
   const onSubmit = (data: Signin) => {
     console.log(data);
+    navigate({to:'/doctors/dashboard'})
   };
 
   return (
