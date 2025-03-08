@@ -1,9 +1,7 @@
+import HomePageComponent from "../../components/pages/home";
+
 const Home = () => {
-  return (
-    <div className="h-full flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold">Home</h1>
-    </div>
-  );
+  return <HomePageComponent />;
 };
 
 export default Home;
