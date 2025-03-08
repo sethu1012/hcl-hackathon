@@ -24,17 +24,20 @@ const SigninFormComponent = () => {
 
   const onSubmit = async (data: Signin) => {
     console.log(data);
+    try {
+      const { status, message } = await postUserSignin(data);
+      if (status) {
+        console.log(message);
+        localStorage.setItem("token", message.token);
+        const user = JSON.parse(atob(message.token.split(".")[1]));
+        localStorage.setItem("user", JSON.stringify(user));
 
-    const { status, message } = await postUserSignin(data);
-    if (status) {
-      console.log(message);
-      localStorage.setItem("token", message.token);
-      const user = JSON.parse(atob(message.token.split(".")[1]));
-      localStorage.setItem("user", JSON.stringify(user));
-
-      navigate({ to: `/${user.role}s/dashboard` });
-    } else {
-      alert(message);
+        navigate({ to: `/${user.role}s/dashboard` });
+      } else {
+        alert("Invalid credentials");
+      }
+    } catch (e) {
+      alert("Invalid credentials");
     }
   };
 
