@@ -16,6 +16,8 @@ import DoctorsDashboard from "./pages/doctors/dashboard";
 import PatientsLayout from "./pages/patients/layout";
 import PatientsDashboard from "./pages/patients/dashboard";
 import { z } from "zod";
+import PatientsProfileComponent from "./components/pages/common/profile";
+import NotFoundPageComponent from "./components/pages/common/404";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -24,6 +26,7 @@ const rootRoute = createRootRoute({
       <TanStackRouterDevtools />
     </>
   ),
+  notFoundComponent: NotFoundPageComponent,
 });
 
 const homeRoute = createRoute({
@@ -72,6 +75,12 @@ export const messagePatientsRoute = createRoute({
   validateSearch: (search) => wickSchema.parse(search),
 });
 
+export const doctorsProfile = createRoute({
+  getParentRoute: () => doctorsLayout,
+  path: "/doctors/profile",
+  component: PatientsProfileComponent,
+});
+
 const patientsLayout = createRoute({
   getParentRoute: () => rootRoute,
   id: "patientsLayout",
@@ -79,9 +88,15 @@ const patientsLayout = createRoute({
 });
 
 const patientsDashboard = createRoute({
-  getParentRoute: () => doctorsLayout,
+  getParentRoute: () => patientsLayout,
   path: "/patients/dashboard",
   component: PatientsDashboard,
+});
+
+const patientsProfile = createRoute({
+  getParentRoute: () => patientsLayout,
+  path: "/patients/profile",
+  component: PatientsProfileComponent,
 });
 
 // add other paths here
@@ -90,8 +105,8 @@ const routeTree = rootRoute.addChildren([
   homeRoute,
   signinRoute,
   signupRoute,
-  doctorsLayout.addChildren([doctorsDashboard, messageDoctorsRoute]),
-  patientsLayout.addChildren([patientsDashboard, messagePatientsRoute]),
+  doctorsLayout.addChildren([doctorsDashboard, doctorsProfile, messageDoctorsRoute]),
+  patientsLayout.addChildren([patientsDashboard, patientsProfile, messagePatientsRoute]),
 ]);
 
 const router = createRouter({
