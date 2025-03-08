@@ -17,15 +17,6 @@ function classNames(...classes: string[]) {
 
 const MenuComponent = () => {
   return (
-    // <>
-    //   {links.map((link) => {
-    //     return (
-    //       <li key={link.name} className="my-2">
-    //         <Link to={link.path}>{link.name}</Link>
-    //       </li>
-    //     );
-    //   })}
-    // </>
     <div className="h-full flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
       <div className="flex h-16 shrink-0 items-center">
         <img
