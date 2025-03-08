@@ -2,8 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { putUserApi } from "../../../../services/api.services";
 
 const ProfileSchema = z.object({
+  name: z.string().min(1, "Name is required"),
   email: z.string().email(),
 });
 
@@ -23,16 +25,25 @@ const ProfilePageComponent = () => {
         const userData = localStorage.getItem("user");
         if (userData) {
           console.log(userData);
-          setUser(JSON.parse(userData));
-          setValue("email", (JSON.parse(userData) as any)?.email);
+          const parsedUserData = JSON.parse(userData);
+          setUser(parsedUserData);
+          setValue("email", (parsedUserData as any)?.email);
+          setValue("name", (parsedUserData as any)?.name);
         }
       }
       getData();
     })();
   }, [setValue, user?.email]);
 
-  const onSubmit = (data: Profile) => {
+  const onSubmit = async (data: Profile) => {
     console.log(data);
+
+    const newData = { ...data, id: user?.userId };
+    const { status, message } = await putUserApi(newData);
+    if (status) {
+      console.log(message);
+      alert("User Data Saved");
+    }
   };
 
   return (
@@ -49,18 +60,36 @@ const ProfilePageComponent = () => {
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-6">
                 <label
-                  htmlFor="first-name"
+                  htmlFor="email"
                   className="block text-sm/6 font-medium text-gray-900"
                 >
                   Email
                 </label>
                 <div className="mt-2">
                   <input
-                    id="first-name"
+                    id="email"
+                    type="text"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    {...register("email")}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="first-name"
+                  className="block text-sm/6 font-medium text-gray-900"
+                >
+                  Name
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="name"
                     type="text"
                     autoComplete="given-name"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    {...register("email")}
+                    {...register("name")}
                   />
                 </div>
               </div>
