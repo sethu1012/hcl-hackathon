@@ -9,6 +9,10 @@ const links = [
     name: "Profile",
     path: "/doctors/profile",
   },
+  {
+    name: "Messages",
+    path: "/doctors/message",
+  },
 ];
 
 function classNames(...classes: string[]) {
