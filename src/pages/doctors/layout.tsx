@@ -1,5 +1,6 @@
 import { Outlet } from "@tanstack/react-router";
 import MenuComponent from "./menu";
+import ProtectRoutes from "../../hoc/role-check";
 
 const DoctorsLayout = () => {
   return (
@@ -14,4 +15,4 @@ const DoctorsLayout = () => {
   );
 };
 
-export default DoctorsLayout;
+export default ProtectRoutes(DoctorsLayout, ["doctor"]);
