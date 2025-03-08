@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { postUserSignup } from "../../../services/api.services";
+import { useNavigate } from "@tanstack/react-router";
 
 const SignupSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -28,6 +29,7 @@ const roles = [
 ];
 
 const SignupFormComponent = () => {
+  const navigate= useNavigate()
   const signupForm = useForm<Signup>({
     resolver: zodResolver(SignupSchema),
   });
@@ -43,6 +45,7 @@ const SignupFormComponent = () => {
     const { status, message } = await postUserSignup(data);
     if (status) {
       console.log(message);
+      navigate({to:'/signin'})
     } else {
       alert(message);
     }

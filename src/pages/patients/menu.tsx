@@ -13,6 +13,10 @@ const links = [
     name: "Messages",
     path: "/patients/message",
   },
+  {
+    name: "Logout",
+    path: "/",
+  },
 ];
 
 function classNames(...classes: string[]) {
