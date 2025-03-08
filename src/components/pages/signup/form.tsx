@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+import { postUserSignup } from "../../../services/api.services";
 
 const SignupSchema = z.object({
+  name: z.string().min(1, "Name is required"),
   email: z.string().email(),
   password: z.string().min(1, "Password is required"),
   sex: z.enum(["male", "female"], {
@@ -35,13 +37,42 @@ const SignupFormComponent = () => {
     formState: { errors },
   } = signupForm;
 
-  const onSubmit = (data: Signup) => {
+  const onSubmit = async (data: Signup) => {
     console.log(data);
+
+    const { status, message } = await postUserSignup(data);
+    if (status) {
+      console.log(message);
+    } else {
+      alert(message);
+    }
   };
 
   return (
     <FormProvider {...signupForm}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-sm/6 font-medium text-gray-900"
+          >
+            Name
+          </label>
+          <div className="mt-2">
+            <input
+              id="name"
+              type="text"
+              placeholder="your name"
+              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              {...register("name")}
+            />
+            {errors.name?.message && (
+              <p className="mt-2 text-sm text-red-600">
+                {errors.name?.message}
+              </p>
+            )}
+          </div>
+        </div>
         <div>
           <label
             htmlFor="email"

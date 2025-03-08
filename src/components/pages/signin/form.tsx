@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+import { postUserSignin } from "../../../services/api.services";
+import { useNavigate } from "@tanstack/react-router";
 
 const SigninSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -10,6 +12,7 @@ const SigninSchema = z.object({
 type Signin = z.infer<typeof SigninSchema>;
 
 const SigninFormComponent = () => {
+  const navigate = useNavigate();
   const signinForm = useForm<Signin>({
     resolver: zodResolver(SigninSchema),
   });
@@ -19,8 +22,20 @@ const SigninFormComponent = () => {
     formState: { errors },
   } = signinForm;
 
-  const onSubmit = (data: Signin) => {
+  const onSubmit = async (data: Signin) => {
     console.log(data);
+
+    const { status, message } = await postUserSignin(data);
+    if (status) {
+      console.log(message);
+      localStorage.setItem("token", message.token);
+      const user = JSON.parse(atob(message.token.split(".")[1]));
+      localStorage.setItem("user", JSON.stringify(user));
+
+      navigate({ to: `/${user.role}s/dashboard` });
+    } else {
+      alert(message);
+    }
   };
 
   return (
