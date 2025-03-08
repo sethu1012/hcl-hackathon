@@ -7,29 +7,29 @@ export const userListServices = () => {
     },
   })
     .then((response) => response.json())
-    .then((responseData) => {
+    .then(() => {
       return [
         {
-            "name":"John",
-            "role":"patient",
-            "id":'1'
+          name: "John",
+          role: "patient",
+          id: "1",
         },
         {
-            "name":"Ram",
-            "role":"doctor",
-            "id":'2'
+          name: "Ram",
+          role: "doctor",
+          id: "2",
         },
         {
-            "name":"Aravind",
-            "role":"doctor",
-            "id":'3'
+          name: "Aravind",
+          role: "doctor",
+          id: "3",
         },
         {
-            "name":"Surya",
-            "role":"patient",
-            "id":'4'
-        }
-    ];
+          name: "Surya",
+          role: "patient",
+          id: "4",
+        },
+      ];
     })
     .catch((error) => console.warn(error));
 };
