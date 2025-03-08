@@ -61,38 +61,22 @@ export const getUserApi = async (data: any) => {
   }
 };
 
-export const userListServices = () => {
-  return fetch("https://jsonplaceholder.typicode.com/posts", {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then(() => {
-      return [
-        {
-          name: "John",
-          role: "patient",
-          id: "1",
-        },
-        {
-          name: "Ram",
-          role: "doctor",
-          id: "2",
-        },
-        {
-          name: "Aravind",
-          role: "doctor",
-          id: "3",
-        },
-        {
-          name: "Surya",
-          role: "patient",
-          id: "4",
-        },
-      ];
-    })
-    .catch((error) => console.warn(error));
+export const userListServices = async() => {
+try {
+    const response = await fetch(BASE_URL + "user", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return { status: true, message: data };
+    }
+    throw new Error("Failed to fetch data");
+  } catch (error) {
+    return { status: false, message: error };
+  }
 };

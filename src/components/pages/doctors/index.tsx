@@ -7,8 +7,7 @@ const DoctorsDashboardComponent = () => {
 
   const fetchUser = async () => {
     const data: any = await userListServices();
-    console.log(data);
-    const filteredValue = data.filter((item: any) => item.role != "doctor");
+    const filteredValue = data.message.filter((item: any) => item.role != "doctor");
     setUserList(filteredValue);
   };
   useEffect(() => {
