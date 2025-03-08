@@ -40,6 +40,27 @@ export const postUserSignin = async (data: any) => {
   }
 };
 
+export const getUserApi = async (data: any) => {
+  try {
+    const response = await fetch(BASE_URL + "user", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return { status: true, message: data };
+    }
+    throw new Error("Failed to fetch data");
+  } catch (error) {
+    return { status: false, message: error };
+  }
+};
+
 export const userListServices = () => {
   return fetch("https://jsonplaceholder.typicode.com/posts", {
     method: "GET",
